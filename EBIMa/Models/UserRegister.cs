@@ -10,7 +10,7 @@ namespace EBIMa.Models
 
 		[Required(ErrorMessage = "Soyad sahəsi tələb olunur.")]
 		[StringLength(50, ErrorMessage = "Soyad ən çox 50 simvol ola bilər.")]
-		public string Surname { get; set; } = string.Empty;
+		public string SurName { get; set; } = string.Empty;
 
 		[Required(ErrorMessage = "Email sahəsi tələb olunur.")]
 		[EmailAddress(ErrorMessage = "Düzgün email daxil edin.")]

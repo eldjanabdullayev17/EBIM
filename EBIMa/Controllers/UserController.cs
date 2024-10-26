@@ -38,7 +38,7 @@ namespace EBIMa.Controllers
 			var user = new User
 			{
 				Name = userRegister.Name,
-				Surname = userRegister.Surname,
+				SurName = userRegister.SurName,
 				Email = userRegister.Email,
 				PasswordHash = passwordHash,
 				PasswordSalt = passwordSalt,
@@ -128,7 +128,7 @@ namespace EBIMa.Controllers
 			var userDto = new GetUserByIdDTO
 			{
 				Name = user.Name,
-				Surname = user.Surname,
+				SurName = user.SurName,
 				Email = user.Email,
 				PhoneNumber = user.OwnerPhoneNumber,
 				MTK = user.MTK,
@@ -151,7 +151,7 @@ namespace EBIMa.Controllers
 			}
 
 			user.Name = newUser.Name;
-			user.Surname = newUser.Surname;
+			user.SurName = newUser.SurName;
 			user.Email = newUser.Email;
 			user.OwnerPhoneNumber = newUser.PhoneNumber;
 			user.MTK = newUser.MTK;

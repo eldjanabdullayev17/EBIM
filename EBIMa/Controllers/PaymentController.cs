@@ -29,7 +29,7 @@ namespace EBIMa.Controllers
 			if (ModelState.IsValid)
 			{
 				// Azure Blob Storage connection string
-				string connectionString = _configuration["Azure:AccessKey"];
+				string connectionString = Environment.GetEnvironmentVariable("azureconnectionstring");
 				string containerName = "upload"; // Yüklənəcək konteyner adı
 
 				if (image != null && image.Length > 0)

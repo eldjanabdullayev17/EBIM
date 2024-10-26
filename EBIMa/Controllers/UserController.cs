@@ -6,6 +6,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using EBIMa.Services;
 using EBIMa.DTO;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace EBIMa.Controllers
 {
@@ -15,11 +17,14 @@ namespace EBIMa.Controllers
 	{
 		private readonly DataContext _context;
 		private readonly IEmailService _emailService;
+		private readonly IConfiguration _configuration;
 
-		public UserController(DataContext context, IEmailService emailService)
+
+		public UserController(DataContext context, IEmailService emailService, IConfiguration configuration)
 		{
 			_context = context;
 			_emailService = emailService;
+			_configuration = configuration;
 		}
 
 		[HttpPost("Register")]
@@ -73,11 +78,6 @@ namespace EBIMa.Controllers
 			// Retrieve the user by email asynchronously
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userLogin.Email);
 
-			if(user?.Role != "Resident")
-			{
-				return Ok("Komendant hesabı.");
-			}
-
 			// Check if the user exists
 			if (user == null)
 			{
@@ -96,7 +96,9 @@ namespace EBIMa.Controllers
 				return BadRequest("Yanlış parol.");
 			}
 
-			return Ok($"Xoş gəldiniz, {user.Email}! :)");
+			string token = GenerateJwtToken(user);
+
+			return Ok(new {Token = token});
 		}
 
 		[HttpGet("verify")]
@@ -270,6 +272,23 @@ namespace EBIMa.Controllers
 		private string CreateRandomToken()
 		{
 			return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+		}
+
+		private string GenerateJwtToken(User user)
+		{
+			var tokenHandler = new JwtSecurityTokenHandler();
+			var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+			var tokenDescriptor = new SecurityTokenDescriptor
+			{
+				Subject = new ClaimsIdentity(new[]
+				{
+					new Claim(ClaimTypes.Role, user.Role)
+				}),
+				Expires = DateTime.UtcNow.AddHours(1),
+				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+			};
+			var token = tokenHandler.CreateToken(tokenDescriptor);
+			return tokenHandler.WriteToken(token);
 		}
 	}
 }

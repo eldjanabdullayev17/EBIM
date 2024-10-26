@@ -98,7 +98,7 @@ namespace EBIMa.Controllers
 
 			string token = GenerateJwtToken(user);
 
-			return Ok(new {Token = token});
+			return Ok(new {UserId = user.Id, Token = token});
 		}
 
 		[HttpGet("verify")]

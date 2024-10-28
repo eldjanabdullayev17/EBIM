@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EBIMa.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241022080851_AddNewPropertyToUser")]
-    partial class AddNewPropertyToUser
+    [Migration("20241028125347_apprequests")]
+    partial class apprequests
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,36 @@ namespace EBIMa.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EBIMa.Models.ApplicationRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ApplicationRequests");
+                });
+
             modelBuilder.Entity("EBIMa.Models.PaymentForm", b =>
                 {
                     b.Property<int>("Id")
@@ -34,27 +64,21 @@ namespace EBIMa.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BankCard")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Month")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QueryType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Year")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -148,7 +172,7 @@ namespace EBIMa.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Surname")
+                    b.Property<string>("SurName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -163,6 +187,17 @@ namespace EBIMa.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("EBIMa.Models.ApplicationRequest", b =>
+                {
+                    b.HasOne("EBIMa.Models.User", "User")
+                        .WithMany("ApplicationRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EBIMa.Models.ResidentRequest", b =>
                 {
                     b.HasOne("EBIMa.Models.User", "Resident")
@@ -172,6 +207,11 @@ namespace EBIMa.Migrations
                         .IsRequired();
 
                     b.Navigation("Resident");
+                });
+
+            modelBuilder.Entity("EBIMa.Models.User", b =>
+                {
+                    b.Navigation("ApplicationRequests");
                 });
 #pragma warning restore 612, 618
         }

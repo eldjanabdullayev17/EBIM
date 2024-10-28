@@ -22,5 +22,7 @@
 		public string ApartmentNumber { get; set; } = string.Empty;
 		public string OwnerPhoneNumber { get; set; } = string.Empty;
 		public string Role { get; set; } = "Resident"; // Default role is Resident
+
+		public ICollection<ApplicationRequest> ApplicationRequests { get; set; }
 	}
 }

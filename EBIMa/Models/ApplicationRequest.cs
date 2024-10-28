@@ -7,5 +7,10 @@
 		public string? Message { get; set; }     // User's request message
 		public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 		public string? Status { get; set; } = "Pending";
+
+		public int UserId { get; set; }
+		public User User { get; set; } = default!;
+
+		
 	}
 }

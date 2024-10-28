@@ -10,10 +10,12 @@ namespace EBIMa.Controllers
 	public class SuperintendentProfileController : ControllerBase
 	{
 		private readonly DataContext _context;
+		private readonly IEmailService _emailService;
 
-		public SuperintendentProfileController(DataContext context)
+		public SuperintendentProfileController(DataContext context, IEmailService emailService)
 		{
 			_context = context;
+			_emailService = emailService;
 		}
 
 		// Get all requests for a specific superintendent
@@ -81,6 +83,8 @@ namespace EBIMa.Controllers
 
 			request.Status = "Approved"; 
 			await _context.SaveChangesAsync();
+
+
 
 			return Ok("Request Approved.");
 		}

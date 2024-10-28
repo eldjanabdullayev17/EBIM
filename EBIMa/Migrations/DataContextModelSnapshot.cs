@@ -42,7 +42,12 @@ namespace EBIMa.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ApplicationRequests");
                 });
@@ -164,6 +169,10 @@ namespace EBIMa.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SurName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("VerificationToken")
                         .HasColumnType("nvarchar(max)");
 
@@ -175,6 +184,17 @@ namespace EBIMa.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("EBIMa.Models.ApplicationRequest", b =>
+                {
+                    b.HasOne("EBIMa.Models.User", "User")
+                        .WithMany("ApplicationRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EBIMa.Models.ResidentRequest", b =>
                 {
                     b.HasOne("EBIMa.Models.User", "Resident")
@@ -184,6 +204,11 @@ namespace EBIMa.Migrations
                         .IsRequired();
 
                     b.Navigation("Resident");
+                });
+
+            modelBuilder.Entity("EBIMa.Models.User", b =>
+                {
+                    b.Navigation("ApplicationRequests");
                 });
 #pragma warning restore 612, 618
         }

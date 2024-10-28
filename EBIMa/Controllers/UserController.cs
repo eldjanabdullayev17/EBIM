@@ -130,7 +130,7 @@ namespace EBIMa.Controllers
 			var userDto = new GetUserByIdDTO
 			{
 				Name = user.Name,
-				SurName = user.SurName,
+				Surname = user.SurName,
 				Email = user.Email,
 				PhoneNumber = user.OwnerPhoneNumber,
 				MTK = user.MTK,
@@ -153,13 +153,9 @@ namespace EBIMa.Controllers
 			}
 
 			user.Name = newUser.Name;
-			user.SurName = newUser.SurName;
+			user.SurName = newUser.Surname;
 			user.Email = newUser.Email;
 			user.OwnerPhoneNumber = newUser.PhoneNumber;
-			user.MTK = newUser.MTK;
-			user.BlockNumber = newUser.BlockNumber;
-			user.Floor = newUser.Floor;
-			user.ApartmentNumber = newUser.ApartmentNumber;
 
 			await _context.SaveChangesAsync();
 
